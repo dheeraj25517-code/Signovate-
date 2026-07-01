@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chapter Test — Signovate</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="topbar">
+    <button class="hamburger-btn" onclick="openMenu()" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+    <span class="logo">Signly</span>
+    <span class="lesson-count" id="quiz-count">1 / 7</span>
+  </div>
+
+  <div class="container">
+    <div style="margin-bottom:12px;">
+      <button class="back-btn" onclick="goBack()">← Back</button>
+    </div>
+
+    <p class="quiz-question">Chapter Test — What does this sign mean?</p>
+
+    <div class="video-area" style="margin-bottom: 16px;">
+      <video id="quiz-video" controls autoplay playsinline>
+        Your browser does not support video.
+      </video>
+    </div>
+
+    <div class="quiz-grid" id="quiz-grid"></div>
+
+    <div class="feedback" id="feedback"></div>
+
+    <button class="primary-btn" id="next-btn" style="display:none" onclick="nextQuestion()">
+      Continue →
+    </button>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/test.js"></script>
+  <script src="js/menu.js"></script>
+</body>
+</html>

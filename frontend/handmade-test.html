@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Handmade Tests — Signovate</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .test-builder {
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .test-step {
+      background: #fff;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+
+    .test-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 24px;
+      color: #1c1c1c;
+    }
+
+    .radio-option {
+      margin: 16px 0;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .radio-option input[type="radio"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: #1D9E75;
+    }
+
+    .radio-option label {
+      cursor: pointer;
+      flex: 1;
+      font-size: 15px;
+    }
+
+    .input-group {
+      margin-top: 12px;
+      text-align: left;
+    }
+
+    .input-group label {
+      font-size: 13px;
+      color: #666;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .input-group input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .checkbox-list {
+      text-align: left;
+      margin-top: 12px;
+      max-height: 200px;
+      overflow-y: auto;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      padding: 12px;
+      background: #fafafa;
+    }
+
+    .checkbox-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .checkbox-option:last-child {
+      border-bottom: none;
+    }
+
+    .checkbox-option input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      accent-color: #1D9E75;
+    }
+
+    .checkbox-option label {
+      cursor: pointer;
+      flex: 1;
+      font-size: 14px;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .btn-group button {
+      flex: 1;
+    }
+
+    #step2 {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+    <button class="hamburger-btn" onclick="openMenu()" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+    <span class="logo">Signovate</span>
+    <span></span>
+  </div>
+
+  <div class="container">
+    <div class="test-builder">
+      <!-- Step 1: Choose Mode -->
+      <div id="step1">
+        <div class="test-step">
+          <h2 class="test-title">🎯 Create Your Custom Test</h2>
+          
+          <div class="radio-option">
+            <input type="radio" id="mode-random" name="test-mode" value="random" checked onchange="toggleStep1Options()">
+            <label for="mode-random">Random questions</label>
+          </div>
+
+          <div id="random-options" class="input-group">
+            <label for="num-questions">How many questions?</label>
+            <input type="number" id="num-questions" min="1" max="50" value="10">
+          </div>
+
+          <div class="radio-option">
+            <input type="radio" id="mode-chapter" name="test-mode" value="chapter" onchange="toggleStep1Options()">
+            <label for="mode-chapter">By chapter</label>
+          </div>
+
+          <div id="chapter-options" style="display: none;" class="checkbox-list">
+            <div id="chapters-checkboxes"></div>
+          </div>
+
+          <div class="btn-group">
+            <button class="back-btn" style="flex: 0; padding: 8px 12px;" onclick="goBack()">← Back</button>
+            <button class="primary-btn" onclick="startTest()">Start Test →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/handmade-test.js"></script>
+  <script src="js/menu.js"></script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lesson — Signovate</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="topbar" style="display: flex; align-items: center; justify-content: space-between; position: relative;">
+    <button class="hamburger-btn" onclick="openMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <span class="logo" style="font-size: 22px; position: absolute; left: 50%; transform: translateX(-50%);">Signovate</span>
+    <div class="topbar-right">
+      <span class="topbar-stat">💎 <span id="diamonds-count">0</span></span>
+      <span class="topbar-stat">🏆 <span id="trophies-count">0</span></span>
+      <span class="streak" onclick="openStreakCalendar()" title="View streak">
+        🔥 <span id="streak-count">0</span>
+      </span>
+    </div>
+  </div>
+
+  <div class="container">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+      <button class="back-btn" onclick="goBack()">← Back</button>
+    </div>
+
+    <div class="step-dots" id="step-dots"></div>
+
+    <div class="video-area" style="position:relative;">
+      <video id="sign-video" autoplay playsinline loop muted></video>
+      
+      <button id="replay-btn" onclick="replayVideo()" style="
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        background: rgba(0,0,0,0.5);
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 6px 12px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+      ">↺ Replay</button>
+    </div>
+
+    <div class="sign-word" id="sign-word"></div>
+    <div class="sign-hint">Take your time — tap Next when ready</div>
+
+    <div style="display:flex; gap:10px;">
+      <button class="primary-btn" id="prev-sign-btn" onclick="goToPrevSign()" style="flex:1; background:#fff; color:#0D9488; border:1.5px solid #0D9488;">← Previous</button>
+      <button class="primary-btn" onclick="goToQuiz()" style="flex:1;">Next →</button>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/stats.js"></script>
+  <script src="js/lesson.js"></script>
+  <script src="js/streak.js"></script>
+  <script src="js/menu.js"></script>
+</body>
+</html>

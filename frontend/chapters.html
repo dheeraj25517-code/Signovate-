@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chapters — Signovate</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="topbar" style="display: flex; align-items: center; justify-content: space-between; position: relative;">
+  <button class="hamburger-btn" onclick="openMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <span class="logo" style="font-size: 22px; position: absolute; left: 50%; transform: translateX(-50%);">Signovate</span>
+  <div class="topbar-right">
+    <span class="topbar-stat">💎 <span id="diamonds-count">0</span></span>
+    <span class="topbar-stat">🏆 <span id="trophies-count">0</span></span>
+    <span class="streak" onclick="openStreakCalendar()" title="View streak">
+      🔥 <span id="streak-count">0</span>
+    </span>
+  </div>
+</div>
+
+  <div class="container">
+    <h1 class="chapters-title">Chapters</h1>
+    <p class="chapters-sub">Complete each chapter to unlock the next one.</p>
+    <div id="chapters-list"></div>
+  </div>
+
+  <!-- No-credits toast -->
+  <div class="credits-toast" id="credits-toast">💎 You don't have enough diamonds!</div>
+
+  <!-- ── "Full version coming soon" popup — shown once when Chapter 1 is fully done ── -->
+  <div id="coming-soon-overlay" class="coming-soon-overlay">
+    <div class="coming-soon-modal">
+      <div class="coming-soon-icon">🎉</div>
+      <h2 class="coming-soon-title">Chapter 1 Complete!</h2>
+      <p class="coming-soon-text">
+        You've finished every module in Greetings. The full version of ISL Learn/Signly —
+        with Chapters 2 onward — is coming soon. Thanks for being an early learner!
+      </p>
+      <button class="primary-btn" onclick="closeComingSoon()">Got it</button>
+    </div>
+  </div>
+
+  <!--
+    Load order:
+    1. api.js    — fetch helpers
+    2. data.js   — populates modules[] (needed later for progress checks)
+    3. stats.js  — refreshes topbar on DOMContentLoaded
+    4. streak.js — injects streak modal
+    5. menu.js   — injects hamburger drawer
+  -->
+  <script src="js/api.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/stats.js"></script>
+  <script src="js/streak.js"></script>
+  <script src="js/menu.js"></script>
+
+  <script>
+  /* ── Chapters page logic ─────────────────────────────────────────────────── */
+
+  // Static chapter metadata — everything EXCEPT module unlock-state,
+  // which is now computed LIVE from modules[] via moduleIndex (see getModuleState below)
+  // instead of the old hardcoded state: "start" / "locked" strings.
+  const CHAPTERS = [
+    {
+      id: 1,
+      name: "Chapter 1 — Greetings",
+      emoji: "👋",
+      tagline: "Your first steps in Indian Sign Language",
+      state: "unlocked",
+      info: `Greetings are the gateway to every conversation. In this chapter you'll build your ISL foundation — starting with a simple "Hello" and progressing all the way to forming complete greeting sentences. By the end you'll be able to introduce yourself, ask someone's name, wish them at any time of day, and respond politely — all without saying a word.`,
+      // moduleIndex maps each row to its real index inside modules[] from data.js.
+      // This is what lets the card update automatically once a module is finished,
+      // instead of being stuck on a hardcoded "start"/"locked" string.
+      modules: [
+        { emoji: "🌱", name: "Basic Words",  moduleIndex: 0 },
+        { emoji: "💬", name: "Phrases",      moduleIndex: 1 },
+        { emoji: "📝", name: "Sentences",    moduleIndex: 2 },
+      ]
+    },
+    {
+      id: 2,
+      name: "Chapter 2 — Family",
+      emoji: "👨‍👩‍👧",
+      tagline: "Signs for the people who matter most",
+      state: "locked",
+      info: `Explore signs for family members, relationships, and emotions shared within a family.`,
+      modules: [
+        { emoji: "👶", name: "Immediate Family", moduleIndex: null },
+        { emoji: "👴", name: "Extended Family",  moduleIndex: null },
+        { emoji: "❤️", name: "Emotions",         moduleIndex: null },
+      ]
+    },
+    {
+      id: 3,
+      name: "Chapter 3 — Daily Life",
+      emoji: "📅",
+      tagline: "Signs for routines, food, and time",
+      state: "locked",
+      info: `Cover everyday vocabulary — meals, time of day, common activities, and basic needs.`,
+      modules: [
+        { emoji: "🍽️", name: "Food & Drink", moduleIndex: null },
+        { emoji: "⏰", name: "Time",          moduleIndex: null },
+        { emoji: "🏃", name: "Activities",    moduleIndex: null },
+      ]
+    },
+    {
+      id: 4,
+      name: "Chapter 4 — School & Work",
+      emoji: "🏫",
+      tagline: "Vocabulary for education and the workplace",
+      state: "locked",
+      info: `Build a professional and academic vocabulary — classroom objects, professions, and workplace phrases.`,
+      modules: [
+        { emoji: "✏️", name: "Classroom",         moduleIndex: null },
+        { emoji: "💼", name: "Professions",        moduleIndex: null },
+        { emoji: "🗣️", name: "Workplace Phrases",  moduleIndex: null },
+      ]
+    },
+    {
+      id: 5,
+      name: "Chapter 5 — Hospital",
+      emoji: "🏥",
+      tagline: "Vocabulary for hospital",
+      state: "locked",
+      info: `Build a vocabulary for a situation at Hospitals— addressing health related problems.`,
+      modules: [
+        { emoji: "🧑‍⚕️", name: "Conversation with Doctor",         moduleIndex: null },
+        { emoji: "🫀", name: "Addressing your health problems",        moduleIndex: null },
+        { emoji: "🤧", name: "Diseases",  moduleIndex: null },
+      ]
+    },
+    {
+      id: 5,
+      name: "Chapter 5 — Banking",
+      emoji: "🏦",
+      tagline: "Vocabulary for banking and financial services",
+      state: "locked",
+      info: `Learn essential banking vocabulary — accounts, transactions, cards, and common conversations at the bank.`,
+      modules: [
+        { emoji: "💳", name: "Bank Accounts",      moduleIndex: null },
+        { emoji: "💰", name: "Transactions",       moduleIndex: null },
+        { emoji: "🗣️", name: "Banking Phrases",    moduleIndex: null },
+      ]
+    },
+    {
+      id: 6,
+      name: "Chapter 6 — Restaurants",
+      emoji: "🍽️",
+      tagline: "Vocabulary for dining out with confidence",
+      state: "locked",
+      info: `Master restaurant vocabulary — ordering food, understanding menus, and communicating with staff.`,
+      modules: [
+        { emoji: "📖", name: "Menu Items",         moduleIndex: null },
+        { emoji: "🍕", name: "Ordering Food",      moduleIndex: null },
+        { emoji: "🗣️", name: "Restaurant Phrases", moduleIndex: null },
+      ]
+    },
+    {
+      id: 7,
+      name: "Chapter 7 — Emergency Situations",
+      emoji: "🚨",
+      tagline: "Vocabulary for urgent and emergency situations",
+      state: "locked",
+      info: `Learn important emergency vocabulary — asking for help, describing problems, and communicating during emergencies.`,
+      modules: [
+        { emoji: "🆘", name: "Asking for Help",     moduleIndex: null },
+        { emoji: "🚑", name: "Medical Emergencies", moduleIndex: null },
+        { emoji: "🌍", name: "Natural Calamities",  moduleIndex: null },
+        { emoji: "🗣️", name: "Emergency Phrases",  moduleIndex: null },
+      ]
+    },
+  ];
+
+  /* ── Compute the LIVE state of one module row from modules[] ──────────────
+     Returns one of: 'done' | 'current' | 'locked'
+     'current' = this is the next module the user should do (previous ones done)
+     This replaces the old hardcoded m.state — it now reflects real progress.
+  ───────────────────────────────────────────────────────────────────────── */
+  function getModuleState(chapterModules, rowIndex) {
+    const row = chapterModules[rowIndex];
+
+    // No real module wired up yet (future chapters) — always locked
+    if (row.moduleIndex === null || row.moduleIndex === undefined) {
+      return 'locked';
+    }
+
+    const mod = modules[row.moduleIndex];
+    if (!mod) return 'locked'; // modules[] not loaded yet or index out of range
+
+    const isDone = mod.progress >= mod.signs.length && mod.signs.length > 0;
+    if (isDone) return 'done';
+
+    // Check if every PREVIOUS row (with a real moduleIndex) is done
+    const prevRows = chapterModules.slice(0, rowIndex);
+    const prevAllDone = prevRows.every(p => {
+      if (p.moduleIndex === null || p.moduleIndex === undefined) return false;
+      const pm = modules[p.moduleIndex];
+      return pm && pm.progress >= pm.signs.length && pm.signs.length > 0;
+    });
+
+    // First row is always "current" if not done; later rows need previous done
+    if (rowIndex === 0 || prevAllDone) return 'current';
+    return 'locked';
+  }
+
+  /* ── Check whether an entire chapter's wired-up modules are all done ──────
+     Only counts rows that have a real moduleIndex — future chapters with
+     moduleIndex: null everywhere will never report "complete".
+  ───────────────────────────────────────────────────────────────────────── */
+  function isChapterFullyComplete(ch) {
+    const wired = ch.modules.filter(m => m.moduleIndex !== null && m.moduleIndex !== undefined);
+    if (wired.length === 0) return false;
+    return wired.every(m => {
+      const mod = modules[m.moduleIndex];
+      return mod && mod.progress >= mod.signs.length && mod.signs.length > 0;
+    });
+  }
+
+  /* ── Render all chapter cards ── */
+  function renderChapters() {
+    const list = document.getElementById('chapters-list');
+    if (list) list.innerHTML = CHAPTERS.map(buildChapterCard).join('');
+
+    // After rendering, check Chapter 1 completion for the "coming soon" popup
+    maybeShowComingSoon();
+  }
+
+  function buildChapterCard(ch) {
+    let statusHtml, ctaHtml;
+
+    if (ch.state === 'unlocked') {
+      statusHtml = `<span class="chapter-status status-unlocked">Unlocked</span>`;
+      ctaHtml    = `<button class="cta-start-btn" onclick="startChapter(${ch.id})">▶ Start Chapter</button>`;
+    } else if (ch.state === 'diamond') {
+      statusHtml = `<span class="chapter-status status-diamond">💎 ${ch.diamondCost} diamonds</span>`;
+      ctaHtml    = `<button class="cta-diamond-btn" onclick="buyWithDiamonds(${ch.id}, ${ch.diamondCost})">💎 Use ${ch.diamondCost} diamonds to start</button>`;
+    } else {
+      statusHtml = `<span class="chapter-status status-locked">🔒 Locked</span>`;
+      ctaHtml    = `<div class="cta-locked-msg">🔒 Not yet unlocked</div>`;
+    }
+
+    const modulesHtml = ch.modules.map((m, i) => {
+      // ── LIVE state instead of the old hardcoded m.state ──
+      const liveState = (ch.state === 'unlocked')
+        ? getModuleState(ch.modules, i)
+        : 'locked';
+
+      let stateLabel;
+      if (liveState === 'done') {
+        stateLabel = `<span class="chap-module-state done">Done</span>`;
+      } else if (liveState === 'current') {
+        stateLabel = `<span class="chap-module-state next">Available</span>`;
+      } else {
+        stateLabel = `<span class="chap-module-state">Complete previous to unlock</span>`;
+      }
+
+      return `
+        <div class="chap-module-row">
+          <span class="chap-module-icon">${m.emoji}</span>
+          <span class="chap-module-name">${m.name}</span>
+          ${stateLabel}
+        </div>`;
+    }).join('');
+
+    return `
+      <div class="chapter-card" id="chapter-card-${ch.id}">
+        <div class="chapter-header" onclick="toggleChapter(${ch.id})">
+          <span class="chapter-emoji">${ch.emoji}</span>
+          <div class="chapter-title-wrap">
+            <div class="chapter-name">${ch.name}</div>
+            <div class="chapter-tagline">${ch.tagline}</div>
+          </div>
+          ${statusHtml}
+          <span class="chapter-arrow" id="arrow-${ch.id}">▼</span>
+        </div>
+        <div class="chapter-body" id="body-${ch.id}">
+          <p class="chapter-info-text">${ch.info}</p>
+          <div class="chapter-modules">${modulesHtml}</div>
+          <div class="chapter-cta">${ctaHtml}</div>
+        </div>
+      </div>`;
+  }
+
+  /* ── Toggle open/close ── */
+  function toggleChapter(id) {
+    const body  = document.getElementById('body-'  + id);
+    const arrow = document.getElementById('arrow-' + id);
+    const isOpen = body.classList.contains('open');
+    document.querySelectorAll('.chapter-body').forEach(b  => b.classList.remove('open'));
+    document.querySelectorAll('.chapter-arrow').forEach(a => a.classList.remove('open'));
+    if (!isOpen) {
+      body.classList.add('open');
+      arrow.classList.add('open');
+    }
+  }
+
+  /* ── Start chapter 1 → go to module page ── */
+  function startChapter(id) {
+    if (id === 1) window.location.href = 'modules.html?chapter=1';
+  }
+
+  /* ── Diamond purchase — check balance first ── */
+  function buyWithDiamonds(id, cost) {
+    const owned = typeof getDiamonds === 'function' ? getDiamonds() : 0;
+    if (owned >= cost) {
+      // Deduct and unlock (future feature)
+      showToast('✅ Chapter unlocked!');
+    } else {
+      showToast("💎 You don't have enough diamonds! (need " + cost + ', have ' + owned + ')');
+    }
+  }
+
+  function showToast(msg) {
+    const toast = document.getElementById('credits-toast');
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000);
+  }
+
+  /* ── "Coming soon" popup — shown once when Chapter 1 is fully complete ────
+     Uses localStorage so it only ever shows the FIRST time the condition
+     becomes true, not on every page visit afterward.
+  ───────────────────────────────────────────────────────────────────────── */
+  function maybeShowComingSoon() {
+    const chapter1 = CHAPTERS.find(c => c.id === 1);
+    if (!chapter1) return;
+
+    const alreadyShown = localStorage.getItem('chapter1_coming_soon_shown') === 'true';
+    if (alreadyShown) return;
+
+    if (isChapterFullyComplete(chapter1)) {
+      const overlay = document.getElementById('coming-soon-overlay');
+      if (overlay) overlay.classList.add('open');
+      localStorage.setItem('chapter1_coming_soon_shown', 'true');
+    }
+  }
+
+  function closeComingSoon() {
+    const overlay = document.getElementById('coming-soon-overlay');
+    if (overlay) overlay.classList.remove('open');
+  }
+  window.closeComingSoon = closeComingSoon;
+
+  /* ── Re-render once modules[] loads from data.js ──────────────────────────
+     IMPORTANT CHANGE: this used to be a no-op (function(){}) that silenced
+     data.js's callback entirely — meaning the page rendered once with
+     modules[] empty and NEVER updated again, even after finishing a lesson.
+     Now it calls renderChapters() so the moment real progress data arrives,
+     the chapter cards re-render with accurate state.
+  ───────────────────────────────────────────────────────────────────────── */
+  window.initModules    = function () { renderChapters(); };
+  window.initLesson     = null;
+  window.initQuiz       = null;
+  window.initCompletion = null;
+
+  /* ── Initial render (in case data.js already finished, or as a fallback) ── */
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', renderChapters);
+  } else {
+    renderChapters();
+  }
+  </script>
+
+</body>
+</html>

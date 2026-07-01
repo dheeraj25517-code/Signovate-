@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quiz — Signovate</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="topbar" style="display: flex; align-items: center; justify-content: space-between; position: relative;">
+  <button class="hamburger-btn" onclick="openMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <span class="logo" style="font-size: 22px; position: absolute; left: 50%; transform: translateX(-50%);">Signovate</span>
+  <div class="topbar-right">
+    <span class="topbar-stat">💎 <span id="diamonds-count">0</span></span>
+    <span class="topbar-stat">🏆 <span id="trophies-count">0</span></span>
+    <span class="streak" onclick="openStreakCalendar()" title="View streak">
+      🔥 <span id="streak-count">0</span>
+    </span>
+  </div>
+</div>
+
+  <div class="container">
+    <div style="margin-bottom:12px;">
+      <button class="back-btn" onclick="goBack()">← Back</button>
+    </div>
+
+    <div class="video-area" style="position:relative; margin-bottom: 16px;">
+    <video id="quiz-video" autoplay playsinline loop></video>
+    <button id="quiz-replay-btn" onclick="replayQuizVideo()" style="
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background: rgba(0,0,0,0.5);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    ">↺ Replay</button>
+  </div>
+  <div id="retry-label" style="
+    display: none;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: #B45309;
+    background: #FEF3C7;
+    border-radius: 10px;
+    padding: 6px 10px;
+    margin-bottom: 12px;
+  ">↺ Try again</div>
+    <p class="quiz-question" id="quiz-question">What does this sign mean?</p>
+
+    <div class="quiz-grid" id="quiz-grid"></div>
+
+    <div class="feedback" id="feedback"></div>
+
+    <button class="primary-btn" id="next-btn" style="display:none" onclick="nextQuestion()">
+      Continue →
+    </button>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/stats.js"></script>
+  <script src="js/quiz.js"></script>
+  <script src="js/menu.js"></script>
+  <script src="js/streak.js"></script>
+</body>
+</html>

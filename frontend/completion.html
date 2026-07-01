@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Complete — Signovate</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <button class="hamburger-btn" onclick="openMenu()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <span class="logo">Signovate</span>
+    </div>
+    <div class="topbar-right">
+      <span class="topbar-stat">💎 <span id="diamonds-count">0</span></span>
+      <span class="topbar-stat">🏆 <span id="trophies-count">0</span></span>
+      <span class="streak" onclick="openStreakCalendar()" title="View streak">
+        🔥 <span id="streak-count">0</span>
+      </span>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="complete-screen">
+      <div class="complete-icon">🎉</div>
+      <h1 class="complete-title" id="complete-title">Module Complete!</h1>
+      <p class="complete-sub" id="complete-sub">You've finished all the signs in this module.</p>
+
+      <!-- Trophy row — hidden until quiz passes trophies param -->
+      <div class="trophy-row" id="trophy-row" style="display:none; margin-bottom:20px;">
+        <div id="trophy-list" class="trophy-list"></div>
+        <p id="accuracy-text" class="accuracy-text"></p>
+      </div>
+
+      <button class="primary-btn" onclick="goHome()">Back to modules</button>
+      <button class="outline-btn" onclick="practiceAgain()">Practice again</button>
+      <button class="outline-btn" id="chapter-test-btn" style="display:none;" onclick="takeChapterTest()">
+        📋 Take Chapter Test
+      </button>
+    </div>
+  </div>
+
+  <!--
+    Load order matters:
+    1. api.js      — fetch helpers (getStreak etc.)
+    2. data.js     — populates `modules`, then calls initCompletion
+    3. stats.js    — MUST be before completion.js so refreshTopbarStats exists
+    4. completion.js — reads URL params, renders trophies, calls refreshTopbarStats
+    5. streak.js   — injects streak modal, calls openStreakCalendar on topbar click
+    6. menu.js     — injects hamburger drawer
+  -->
+  <script src="js/api.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/stats.js"></script>
+  <script src="js/completion.js"></script>
+  <script src="js/streak.js"></script>
+  <script src="js/menu.js"></script>
+
+</body>
+</html>
