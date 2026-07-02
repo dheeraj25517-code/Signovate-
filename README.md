@@ -6,12 +6,11 @@
 
 ## What is Signovate?
 
-India has an estimated 63 million people who are deaf or hard of hearing, yet fewer than 2% know sign language and certified interpreters are extremely scarce. The people around deaf individuals — parents, teachers, frontline workers — were never taught the language needed to communicate with them.
+India has 18–20 million deaf people, but under 1% know ISL and certified interpreters are scarce. The problem is not just deafness — the people around deaf individuals (parents, teachers, doctors, coworkers) also do not know ISL, leaving both sides unable to communicate. Signovate bridges that gap.
 
-Signovate fixes that. It's a Duolingo-style web app that teaches Indian Sign Language through short video lessons, quizzes, streaks, and progress tracking — free, no login required, works on any device.
+Signovate teaches ISL to the hearing people around deaf individuals — parents of deaf children, teachers in inclusive schools, healthcare workers, frontline service workers, and corporate coworkers — as well as deaf individuals who never had access to formal ISL education.
 
-Sign demonstrations are sourced from the Government of India's official **ISLRTC dictionary**, explicitly licensed for teaching and ISL-related technology development.
-
+Sign videos are sourced directly from the **ISLRTC (Indian Sign Language Research and Training Centre)** government dictionary and re-hosted as compressed clips for fast, reliable playback on any network — fixing the core failure of Sign Learn, the government's own broken app.
 ---
 
 ## Features
@@ -44,7 +43,11 @@ Sign demonstrations are sourced from the Government of India's official **ISLRTC
 ### Prerequisites
 
 - Python 3.10 or higher
+- A modern web browser
+- VS Code extension (or any local HTTP server)
 - Git
+---
+
 
 ### 1. Clone the repository
 
@@ -73,6 +76,28 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
+**Install dependencies:**
+ 
+```bash
+pip install -r requirements.txt
+```
+ 
+**Seed the database:**
+ 
+```bash
+python -m database.seed
+```
+
+This creates `backend/database/isl_learn.db` with all modules, lessons, and quiz options pre-loaded.
+ 
+**Start the backend server:**
+ 
+```bash
+uvicorn main:app --reload
+```
+ 
+---
+
 ### 3. Add video assets
 
 Video files are not included in this repository due to file size. You will need to:
@@ -81,13 +106,8 @@ Video files are not included in this repository due to file size. You will need 
 - Place them in `frontend/assets/greetings/` and `frontend/assets/emergency/`
 - File naming follows the pattern: `Hello.mp4`, `Thank_You.mp4`, etc.
 
-### 4. Seed the database
 
-```bash
-.\venv\Scripts\python.exe -m database.seed
-```
-
-### 5. Run the backend server
+### 4. Run the backend server
 
 ```bash
 .\venv\Scripts\python.exe -m uvicorn main:app --reload
@@ -125,6 +145,12 @@ Signovate-/
 │   └── assets/
 │       ├── greetings/      # Greetings module videos
 │       └── emergency/      # Emergency module videos
+│       └── Icons/          # 
+Icons
+│       └── Quiz_videos/    # 
+Quiz module videos
+│       └── logo.png/    # 
+Logo
 └── backend/
     ├── main.py             # FastAPI app + video streaming
     ├── requirements.txt
@@ -144,7 +170,7 @@ Signovate-/
 
 ---
 
-## Content Source
+## Content Licsnse
 
 All sign language videos are sourced from the **Indian Sign Language Research and Training Centre (ISLRTC)**, Government of India. ISLRTC's dictionary is explicitly licensed for teaching and ISL-related technology development.
 
@@ -156,4 +182,4 @@ All sign language videos are sourced from the **Indian Sign Language Research an
 
 ## Team
 
-Built by sDheeraj Kumar Thota & Srivaishnavi Paramatmuni
+Built by Dheeraj Kumar Thota & Srivaishnavi Paramatmuni
