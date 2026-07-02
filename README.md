@@ -167,7 +167,7 @@ Signovate-/
 
 ---
 
-## Content Licsnse
+## Content Licsense
 
 All sign language videos are sourced from the **Indian Sign Language Research and Training Centre (ISLRTC)**, Government of India. ISLRTC's dictionary is explicitly licensed for teaching and ISL-related technology development.
 
@@ -179,4 +179,4 @@ All sign language videos are sourced from the **Indian Sign Language Research an
 
 ## Team
 
-Built by Dheeraj Kumar Thota & Srivaishnavi Paramatmuni
+Built for **Samsung Solve for Tomorrow 2026** under the **Health and Education** theme by Dheeraj Kumar Thota & Srivaishnavi Paramatmuni.
