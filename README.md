@@ -153,3 +153,7 @@ All sign language videos are sourced from the **Indian Sign Language Research an
 
 ---
 
+
+## Team
+
+Built by sDheeraj Kumar Thota & Srivaishnavi Paramatmuni
