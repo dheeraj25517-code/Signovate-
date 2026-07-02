@@ -153,14 +153,3 @@ All sign language videos are sourced from the **Indian Sign Language Research an
 
 ---
 
-## Built for
-
-**Samsung Solve for Tomorrow** — AI for India track
-
-Signovate addresses a real, severe gap: India has no free, reliable, working platform to teach Indian Sign Language to the hearing people who need it most.
-
----
-
-## Team
-
-Built by students at IIIT Delhi.
