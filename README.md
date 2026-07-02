@@ -147,7 +147,7 @@ Signovate-/
 │       └── emergency/      # Emergency module videos
 │       └── Icons/          # Icons
 │       └── Quiz_videos/    # Quiz module videos
-│       └── logo.png/    # Logo
+│       └── logo.png/       # Logo
 └── backend/
     ├── main.py             # FastAPI app + video streaming
     ├── requirements.txt
