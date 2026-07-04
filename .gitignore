@@ -9,7 +9,7 @@ backend/database/isl_learn.db
 
 # Videos (too large for git — share via Drive/USB)
 frontend/assets/
-
+!frontend/assets/*.png
 # OS
 .DS_Store
 Thumbs.db
