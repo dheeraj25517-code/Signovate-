@@ -29,23 +29,23 @@ Sign videos are sourced directly from the **ISLRTC (Indian Sign Language Researc
 ## Preview
 
 ### Home
-![Home](frontend/assets/home.png)
+![Home](frontend/home.png)
 
 ### Chapters
-![Chapters](frontend/assets/chapters.png)
+![Chapters](frontend/chapters.png)
 
 ### Modules
-![Modules](frontend/assets/modules.png)
+![Modules](frontend/modules.png)
 
 ### Lesson
-![Lesson](frontend/assets/lesson.png)
+![Lesson](frontend/lesson.png)
 
 ### Quiz
-![Quiz 1](frontend/assets/quiz1.png)
-![Quiz 2](frontend/assets/quiz2.png)
+![Quiz 1](frontend/quiz1.png)
+![Quiz 2](frontend/quiz2.png)
 
 ### Completion
-![Completion](frontend/assets/completion.png)
+![Completion](frontend/completion.png)
 
 ## Tech Stack
 
