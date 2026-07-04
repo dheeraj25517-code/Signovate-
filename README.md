@@ -164,11 +164,11 @@ Signovate-/
 │   │   ├── completion.js   # Completion screen
 │   │   └── menu.js         # Hamburger menu
 │   └── assets/
+│       ├── logo.png        # Signovate logo
 │       ├── greetings/      # Greetings module videos
-│       └── emergency/      # Emergency module videos
-│       └── Icons/          # Icons
-│       └── Quiz_videos/    # Quiz module videos
-│       └── logo.png/       # Logo
+│       ├── emergency/      # Emergency module videos
+│       ├── icons/          # Chapter and module icons
+│       └── Quiz_videos/    # Quiz video assets
 └── backend/
     ├── main.py             # FastAPI app + video streaming
     ├── requirements.txt
